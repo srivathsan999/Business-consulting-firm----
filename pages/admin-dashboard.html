@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Admin Dashboard - ConsultPro</title>
+    <meta name="description" content="Admin dashboard for ConsultPro business consulting platform">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+    <link rel="apple-touch-icon" href="../assets/images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        :root {
+            --dashboard-primary: #6366f1;
+            --dashboard-success: #10b981;
+            --dashboard-warning: #f59e0b;
+            --dashboard-danger: #ef4444;
+            --dashboard-info: #3b82f6;
+            --dashboard-purple: #8b5cf6;
+            --dashboard-pink: #ec4899;
+            --dashboard-cyan: #06b6d4;
+        }
+        
+        body {
+            background: #f8fafc;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            color: white !important;
+        }
+        
+        .navbar .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.5);
+            color: white;
+        }
+        
+        .navbar .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            color: white;
+        }
+        
+        /* Dashboard Container */
+        .dashboard-container {
+            padding: 2rem 0;
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* Stats Cards */
+        .stat-card {
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .stat-card.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .stat-card.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .stat-card.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .stat-card.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        
+        .stat-card.purple {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+        
+        .stat-card.pink {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+        }
+        
+        .stat-card.cyan {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        }
+        
+        .stat-card .stat-icon {
+            font-size: 2.5rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-card .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Chart Cards */
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border: none;
+        }
+        
+        .chart-card .card-header {
+            background: transparent;
+            border: none;
+            padding: 0 0 1rem 0;
+            margin-bottom: 1rem;
+        }
+        
+        .chart-card .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        /* Activity Card */
+        .activity-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border: none;
+        }
+        
+        .activity-item {
+            padding: 1rem;
+            border-left: 3px solid;
+            margin-bottom: 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            background: #f3f4f6;
+            transform: translateX(5px);
+        }
+        
+        .activity-item.primary { border-left-color: #667eea; }
+        .activity-item.success { border-left-color: #10b981; }
+        .activity-item.warning { border-left-color: #f59e0b; }
+        .activity-item.danger { border-left-color: #ef4444; }
+        
+        /* Quick Actions */
+        .quick-action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border: none;
+        }
+        
+        .action-btn {
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+        
+        .action-btn.primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .action-btn.success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .action-btn.warning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .action-btn.info { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        
+        /* Table Styles */
+        .table-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border: none;
+        }
+        
+        .table thead {
+            background: #f9fafb;
+        }
+        
+        .table thead th {
+            border: none;
+            font-weight: 600;
+            color: #374151;
+            padding: 1rem;
+        }
+        
+        .table tbody td {
+            padding: 1rem;
+            border-color: #f3f4f6;
+        }
+        
+        .badge-custom {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        
+        /* Progress Bars */
+        .progress-custom {
+            height: 8px;
+            border-radius: 10px;
+            background: #e5e7eb;
+        }
+        
+        .progress-custom .progress-bar {
+            border-radius: 10px;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            margin: 0.5rem 0 0 0;
+        }
+        
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .toast {
+            min-width: 300px;
+        }
+        
+        /* Mobile view - Position time at top left corner */
+        @media (max-width: 768px) {
+            .activity-item .d-flex.justify-content-between {
+                flex-direction: column !important;
+                position: relative !important;
+            }
+            .activity-item .d-flex.justify-content-between small {
+                order: -1 !important;
+                margin-left: 0 !important;
+                margin-bottom: 0.5rem !important;
+                align-self: flex-start !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="home-1.html">
+                <img src="../assets/images/favicon.svg" alt="ConsultPro" height="40" width="40" class="me-2">
+                ConsultPro
+            </a>
+            <div class="ms-auto">
+                <a href="home-1.html" class="btn btn-outline-light" id="logoutBtn">
+                    <i class="bi bi-box-arrow-right me-1"></i>Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <div class="container-fluid">
+            <!-- Stats Row -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card primary">
+                        <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card success">
+                        <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+                        <div class="stat-value">856</div>
+                        <div class="stat-label">Active Projects</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card warning">
+                        <div class="stat-icon"><i class="bi bi-cash-stack"></i></div>
+                        <div class="stat-value">$45.2K</div>
+                        <div class="stat-label">Revenue (Monthly)</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card danger">
+                        <div class="stat-icon"><i class="bi bi-envelope-fill"></i></div>
+                        <div class="stat-value">342</div>
+                        <div class="stat-label">Pending Requests</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Stats Row -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card info">
+                        <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                        <div class="stat-value">+12.5%</div>
+                        <div class="stat-label">Growth Rate</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card purple">
+                        <div class="stat-icon"><i class="bi bi-calendar-check-fill"></i></div>
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Consultations</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card pink">
+                        <div class="stat-icon"><i class="bi bi-star-fill"></i></div>
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card cyan">
+                        <div class="stat-icon"><i class="bi bi-clock-history"></i></div>
+                        <div class="stat-value">2.4h</div>
+                        <div class="stat-label">Avg Response Time</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts and Activity Row -->
+            <div class="row g-4">
+                <!-- Revenue Chart -->
+                <div class="col-lg-8">
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h5 class="card-title">Revenue Overview</h5>
+                        </div>
+                        <div style="height: 300px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 10px;">
+                            <div class="text-center">
+                                <i class="bi bi-graph-up" style="font-size: 4rem; color: #3b82f6; opacity: 0.5;"></i>
+                                <p class="mt-3 text-muted">Revenue chart visualization</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="col-lg-4">
+                    <div class="quick-action-card">
+                        <h5 class="mb-3">Quick Actions</h5>
+                        <a href="#" class="action-btn primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                            <i class="bi bi-plus-circle me-2"></i>Add New User
+                        </a>
+                        <a href="#" class="action-btn success" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                            <i class="bi bi-file-earmark-plus me-2"></i>Create Project
+                        </a>
+                        <a href="#" class="action-btn warning" data-bs-toggle="modal" data-bs-target="#sendNotificationModal">
+                            <i class="bi bi-envelope-paper me-2"></i>Send Notification
+                        </a>
+                        <a href="#" class="action-btn info" id="exportDataBtn">
+                            <i class="bi bi-download me-2"></i>Export Data
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activity and Recent Users Row -->
+            <div class="row g-4 mt-2">
+                <!-- Recent Activity -->
+                <div class="col-lg-6">
+                    <div class="activity-card">
+                        <div class="section-header">
+                            <h3>Recent Activity</h3>
+                            <p>Latest updates and actions</p>
+                        </div>
+                        <div class="activity-item primary">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>New user registered</strong>
+                                    <p class="mb-0 text-muted small">John Doe joined the platform</p>
+                                </div>
+                                <small class="text-muted">2 min ago</small>
+                            </div>
+                        </div>
+                        <div class="activity-item success">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Project completed</strong>
+                                    <p class="mb-0 text-muted small">Strategic Planning project finished</p>
+                                </div>
+                                <small class="text-muted">15 min ago</small>
+                            </div>
+                        </div>
+                        <div class="activity-item warning">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Payment received</strong>
+                                    <p class="mb-0 text-muted small">$5,000 payment processed</p>
+                                </div>
+                                <small class="text-muted">1 hour ago</small>
+                            </div>
+                        </div>
+                        <div class="activity-item danger">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>System alert</strong>
+                                    <p class="mb-0 text-muted small">High server load detected</p>
+                                </div>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                        </div>
+                        <div class="activity-item primary">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Consultation scheduled</strong>
+                                    <p class="mb-0 text-muted small">New consultation booked for tomorrow</p>
+                                </div>
+                                <small class="text-muted">3 hours ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Users Table -->
+                <div class="col-lg-6">
+                    <div class="table-card">
+                        <div class="section-header">
+                            <h3>Recent Users</h3>
+                            <p>Latest registered users</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Status</th>
+                                        <th>Progress</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                                    JD
+                                                </div>
+                                                <div>
+                                                    <strong>John Doe</strong><br>
+                                                    <small class="text-muted">john@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-success badge-custom">Active</span></td>
+                                        <td>
+                                            <div class="progress progress-custom">
+                                                <div class="progress-bar bg-success" style="width: 85%"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                                    JS
+                                                </div>
+                                                <div>
+                                                    <strong>Jane Smith</strong><br>
+                                                    <small class="text-muted">jane@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-warning badge-custom">Pending</span></td>
+                                        <td>
+                                            <div class="progress progress-custom">
+                                                <div class="progress-bar bg-warning" style="width: 45%"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                                    MB
+                                                </div>
+                                                <div>
+                                                    <strong>Mike Brown</strong><br>
+                                                    <small class="text-muted">mike@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-success badge-custom">Active</span></td>
+                                        <td>
+                                            <div class="progress progress-custom">
+                                                <div class="progress-bar bg-success" style="width: 92%"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                                    SW
+                                                </div>
+                                                <div>
+                                                    <strong>Sarah Wilson</strong><br>
+                                                    <small class="text-muted">sarah@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-danger badge-custom">Inactive</span></td>
+                                        <td>
+                                            <div class="progress progress-custom">
+                                                <div class="progress-bar bg-danger" style="width: 20%"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projects Overview -->
+            <div class="row g-4 mt-2">
+                <div class="col-12">
+                    <div class="table-card">
+                        <div class="section-header">
+                            <h3>Projects Overview</h3>
+                            <p>All active and completed projects</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <th>Client</th>
+                                        <th>Status</th>
+                                        <th>Progress</th>
+                                        <th>Due Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Strategic Planning</strong></td>
+                                        <td>ABC Corporation</td>
+                                        <td><span class="badge bg-success badge-custom">Active</span></td>
+                                        <td>
+                                            <div class="progress progress-custom">
+                                                <div class="progress-bar bg-success" style="width: 75%"></div>
+                                            </div>
+                                        </td>
+                                        <td>Dec 30, 2024</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary view-project-btn" data-project="Strategic Planning" data-client="ABC Corporation"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success edit-project-btn" data-project="Strategic Planning"><i class="bi bi-pencil"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Financial Advisory</strong></td>
+                                        <td>XYZ Industries</td>
+                                        <td><span class="badge bg-warning badge-custom">In Progress</span></td>
+                                        <td>
+                                            <div class="progress progress-custom">
+                                                <div class="progress-bar bg-warning" style="width: 50%"></div>
+                                            </div>
+                                        </td>
+                                        <td>Jan 15, 2025</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary view-project-btn" data-project="Financial Advisory" data-client="XYZ Industries"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success edit-project-btn" data-project="Financial Advisory"><i class="bi bi-pencil"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Digital Transformation</strong></td>
+                                        <td>Tech Solutions Inc</td>
+                                        <td><span class="badge bg-info badge-custom">Planning</span></td>
+                                        <td>
+                                            <div class="progress progress-custom">
+                                                <div class="progress-bar bg-info" style="width: 25%"></div>
+                                            </div>
+                                        </td>
+                                        <td>Feb 1, 2025</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary view-project-btn" data-project="Digital Transformation" data-client="Tech Solutions Inc"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success edit-project-btn" data-project="Digital Transformation"><i class="bi bi-pencil"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Operations Optimization</strong></td>
+                                        <td>Global Manufacturing</td>
+                                        <td><span class="badge bg-success badge-custom">Completed</span></td>
+                                        <td>
+                                            <div class="progress progress-custom">
+                                                <div class="progress-bar bg-success" style="width: 100%"></div>
+                                            </div>
+                                        </td>
+                                        <td>Dec 20, 2024</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary view-project-btn" data-project="Operations Optimization" data-client="Global Manufacturing"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success edit-project-btn" data-project="Operations Optimization"><i class="bi bi-pencil"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="toastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastBody">
+                Message here
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label for="userFirstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="userFirstName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userLastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="userLastName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="userEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userRole" class="form-label">Role</label>
+                            <select class="form-select" id="userRole" required>
+                                <option value="">Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="manager">Manager</option>
+                                <option value="consultant">Consultant</option>
+                                <option value="user">User</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="userPassword" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveUserBtn">Add User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Project Modal -->
+    <div class="modal fade" id="createProjectModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createProjectForm">
+                        <div class="mb-3">
+                            <label for="projectName" class="form-label">Project Name</label>
+                            <input type="text" class="form-control" id="projectName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectClient" class="form-label">Client</label>
+                            <input type="text" class="form-control" id="projectClient" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="projectStartDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="projectStartDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="projectEndDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="projectEndDate" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectStatus" class="form-label">Status</label>
+                            <select class="form-select" id="projectStatus" required>
+                                <option value="">Select Status</option>
+                                <option value="planning">Planning</option>
+                                <option value="active">Active</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="projectDescription" rows="4" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="saveProjectBtn">Create Project</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Send Notification Modal -->
+    <div class="modal fade" id="sendNotificationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Send Notification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="sendNotificationForm">
+                        <div class="mb-3">
+                            <label for="notificationRecipient" class="form-label">Recipient</label>
+                            <select class="form-select" id="notificationRecipient" required>
+                                <option value="">Select Recipient</option>
+                                <option value="all">All Users</option>
+                                <option value="admins">Admins Only</option>
+                                <option value="managers">Managers Only</option>
+                                <option value="consultants">Consultants Only</option>
+                                <option value="users">Regular Users</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notificationSubject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="notificationSubject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notificationMessage" class="form-label">Message</label>
+                            <textarea class="form-control" id="notificationMessage" rows="5" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notificationType" class="form-label">Type</label>
+                            <select class="form-select" id="notificationType" required>
+                                <option value="info">Info</option>
+                                <option value="success">Success</option>
+                                <option value="warning">Warning</option>
+                                <option value="error">Error</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning" id="sendNotificationBtn">Send Notification</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- View Project Modal -->
+    <div class="modal fade" id="viewProjectModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Project Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="viewProjectContent">
+                    <!-- Project details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Project Modal -->
+    <div class="modal fade" id="editProjectModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProjectForm">
+                        <div class="mb-3">
+                            <label for="editProjectName" class="form-label">Project Name</label>
+                            <input type="text" class="form-control" id="editProjectName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProjectClient" class="form-label">Client</label>
+                            <input type="text" class="form-control" id="editProjectClient" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editProjectStartDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="editProjectStartDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editProjectEndDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="editProjectEndDate" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProjectStatus" class="form-label">Status</label>
+                            <select class="form-select" id="editProjectStatus" required>
+                                <option value="planning">Planning</option>
+                                <option value="active">Active</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProjectProgress" class="form-label">Progress (%)</label>
+                            <input type="number" class="form-control" id="editProjectProgress" min="0" max="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProjectDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editProjectDescription" rows="4" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="updateProjectBtn">Update Project</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/main.js"></script>
+    
+    <script>
+        // Toast notification function
+        function showToast(title, message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastBody = document.getElementById('toastBody');
+            
+            toastTitle.textContent = title;
+            toastBody.textContent = message;
+            
+            // Remove previous type classes
+            toast.classList.remove('text-bg-primary', 'text-bg-success', 'text-bg-warning', 'text-bg-danger', 'text-bg-info');
+            
+            // Add appropriate type class
+            const typeClasses = {
+                'success': 'text-bg-success',
+                'error': 'text-bg-danger',
+                'warning': 'text-bg-warning',
+                'info': 'text-bg-info'
+            };
+            toast.classList.add(typeClasses[type] || 'text-bg-info');
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+        
+        // Add User functionality
+        document.getElementById('saveUserBtn').addEventListener('click', function() {
+            const form = document.getElementById('addUserForm');
+            if (form.checkValidity()) {
+                const firstName = document.getElementById('userFirstName').value;
+                const lastName = document.getElementById('userLastName').value;
+                const email = document.getElementById('userEmail').value;
+                const role = document.getElementById('userRole').value;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+                    modal.hide();
+                    form.reset();
+                    showToast('Success!', `User ${firstName} ${lastName} has been added successfully.`, 'success');
+                    
+                    // Update stats (simulate)
+                    const userCount = document.querySelector('.stat-card.primary .stat-value');
+                    const currentCount = parseInt(userCount.textContent.replace(/,/g, ''));
+                    userCount.textContent = (currentCount + 1).toLocaleString();
+                }, 500);
+            } else {
+                form.reportValidity();
+            }
+        });
+        
+        // Create Project functionality
+        document.getElementById('saveProjectBtn').addEventListener('click', function() {
+            const form = document.getElementById('createProjectForm');
+            if (form.checkValidity()) {
+                const projectName = document.getElementById('projectName').value;
+                const client = document.getElementById('projectClient').value;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('createProjectModal'));
+                    modal.hide();
+                    form.reset();
+                    showToast('Success!', `Project "${projectName}" has been created successfully.`, 'success');
+                    
+                    // Update stats (simulate)
+                    const projectCount = document.querySelector('.stat-card.success .stat-value');
+                    const currentCount = parseInt(projectCount.textContent.replace(/,/g, ''));
+                    projectCount.textContent = (currentCount + 1).toLocaleString();
+                }, 500);
+            } else {
+                form.reportValidity();
+            }
+        });
+        
+        // Send Notification functionality
+        document.getElementById('sendNotificationBtn').addEventListener('click', function() {
+            const form = document.getElementById('sendNotificationForm');
+            if (form.checkValidity()) {
+                const recipient = document.getElementById('notificationRecipient').value;
+                const subject = document.getElementById('notificationSubject').value;
+                const type = document.getElementById('notificationType').value;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('sendNotificationModal'));
+                    modal.hide();
+                    form.reset();
+                    showToast('Notification Sent!', `Notification "${subject}" has been sent to ${recipient}.`, type);
+                }, 500);
+            } else {
+                form.reportValidity();
+            }
+        });
+        
+        // Export Data functionality
+        document.getElementById('exportDataBtn').addEventListener('click', function() {
+            // Simulate export
+            showToast('Export Started', 'Your data export has been initiated. You will receive an email when it\'s ready.', 'info');
+            
+            // Simulate download
+            setTimeout(() => {
+                showToast('Export Complete', 'Data has been exported successfully!', 'success');
+            }, 2000);
+        });
+        
+        // View Project functionality
+        document.querySelectorAll('.view-project-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const projectName = this.getAttribute('data-project');
+                const client = this.getAttribute('data-client');
+                
+                const content = `
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Project Name:</strong>
+                            <p>${projectName}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Client:</strong>
+                            <p>${client}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Status:</strong>
+                            <p><span class="badge bg-success">Active</span></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Progress:</strong>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" style="width: 75%">75%</div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <strong>Description:</strong>
+                            <p>This is a detailed description of the ${projectName} project for ${client}.</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Start Date:</strong>
+                            <p>January 1, 2024</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Due Date:</strong>
+                            <p>December 30, 2024</p>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('viewProjectContent').innerHTML = content;
+                const modal = new bootstrap.Modal(document.getElementById('viewProjectModal'));
+                modal.show();
+            });
+        });
+        
+        // Edit Project functionality
+        document.querySelectorAll('.edit-project-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const projectName = this.getAttribute('data-project');
+                
+                // Populate form with project data
+                document.getElementById('editProjectName').value = projectName;
+                document.getElementById('editProjectClient').value = 'Client Name';
+                document.getElementById('editProjectStartDate').value = '2024-01-01';
+                document.getElementById('editProjectEndDate').value = '2024-12-30';
+                document.getElementById('editProjectStatus').value = 'active';
+                document.getElementById('editProjectProgress').value = '75';
+                document.getElementById('editProjectDescription').value = `Description for ${projectName} project.`;
+                
+                const modal = new bootstrap.Modal(document.getElementById('editProjectModal'));
+                modal.show();
+            });
+        });
+        
+        // Update Project functionality
+        document.getElementById('updateProjectBtn').addEventListener('click', function() {
+            const form = document.getElementById('editProjectForm');
+            if (form.checkValidity()) {
+                const projectName = document.getElementById('editProjectName').value;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editProjectModal'));
+                    modal.hide();
+                    showToast('Project Updated!', `Project "${projectName}" has been updated successfully.`, 'success');
+                }, 500);
+            } else {
+                form.reportValidity();
+            }
+        });
+        
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            showToast('Logging out...', 'You have been successfully logged out.', 'info');
+            setTimeout(() => {
+                window.location.href = 'home-1.html';
+            }, 1000);
+        });
+        
+        // Set today's date as default for date inputs
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('projectStartDate').value = today;
+        document.getElementById('editProjectStartDate').value = today;
+    </script>
+</body>
+</html>
+
